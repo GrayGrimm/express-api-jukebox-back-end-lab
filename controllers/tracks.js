@@ -60,7 +60,22 @@ router.put('/:trackId', async (req, res) => {
 });
 
 //--------------------------DELETE - '/tracks/:trackId'--------------------------//
-
+router.delete('/:trackId', async (req, res) => {
+    try {
+        const foundTrack = await Track.findByIdAndDelete(req.params.trackId)
+        if (!foundTrack) {
+            res.status(404);
+            throw new Error("Track not Found");
+        };
+        res.status(200).json(foundTrack);
+    } catch (err) {
+        if (res.statusCode === 404) {
+            res.json({ err: err.message });
+        } else {
+            res.status(500).json({ err: err.message });
+        };
+    };
+})
 
 //--------------------------Exports--------------------------//
 
